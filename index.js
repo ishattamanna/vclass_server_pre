@@ -598,6 +598,33 @@ async function run() {
       const submission = await submissionsCollection.findOne(query);
       res.send(submission);
     });
+
+    app.put('/change-pp', async (req, res) => {
+      const userEmail = req.body.userEmail;
+      const findUser = { email: userEmail };
+      const updatedDoc = {
+        $set: {
+          profilePic: req.body.profilePic
+        }
+      };
+
+      const option = { upsert: true };
+
+      const confirmation = await usersCollection.updateOne(findUser, updatedDoc, option);
+      res.send(confirmation)
+    })
+
+    app.put('/edit-profile', async (req, res) => {
+      const findUser = { email: req.query.email };
+      const updatingInfo = req.body;
+      const updatedDoc = {
+        $set: updatingInfo
+      }
+      const option = { upsert: true };
+      const confirmation = await usersCollection.updateOne(findUser, updatedDoc, option);
+      res.send(confirmation)
+    })
+
   } finally {
   }
 }
